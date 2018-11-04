@@ -49,6 +49,7 @@ def M(n, x00, xnn):
 # solucao de sistema por Gauss
 def gauss(A, d):
 	# DO THISSSSSSSSSSSSSS
+	# https://martin-thoma.com/solving-linear-equations-with-gaussian-elimination/
 	return
 
 def s_delta(t, h, M, A, B):
