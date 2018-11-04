@@ -1,5 +1,16 @@
 import numpy as np
 
+T = np.arange(0, 1.1, .1, dtype=float)
+X = [2.00, 1.81, 1.64, 1.49, 1.36, 1.25, 1.16, 1.09, 1.04, 1.01, 1]
+
+def monta_h(v):
+	n = len(v)
+	# Instancia h como vetor vazio com tamanho n - 1
+	h = np.empty(n - 1)
+	for i in range(n - 1):
+		h[i] = v[i+1] - v[i]
+	return h
+
 def monta_matriz(n):
 	# Instancia matrix nxn
 	# preenchida com 0
@@ -15,7 +26,7 @@ def monta_matriz(n):
 # x00 = 2a DERIVADA DE x0
 # xnn = 2a DERIVADA DE xn
 # calcule x00 & xnn A PARTIR DO DEFINIDO NO SLIDE, TEM FORMULA DE APROXIMACAO PRA AMBOS
-def monta_vetor(n, X, x00, xnn):
+def monta_vetor(n, x00, xnn):
 	# Instancia matrix nxn
 	# preenchida com 0
 	d = np.full((n, n), 0.0, dtype=float)
@@ -24,14 +35,14 @@ def monta_vetor(n, X, x00, xnn):
 	d[n+1, 1] = 2*xnn
 	
 	for i in range(2, n+1):
-		d[i, 1] = 6*(2*(X[i+1] - X[i]) - 2*X(X[i] - X[i-1]))
+		d[i, 1] = 6*(2*(X[i+1] - X[i]) - 2*X*(X[i] - X[i-1]))
 	
 	return d
 
 # VETOR DE VALORES M 
-def M(n, X, x00, xnn):
+def M(n, x00, xnn):
 	A = monta_matriz(n)
-	d = monta_vetor(n, X, x00, xnn)
+	d = monta_vetor(n, x00, xnn)
 	# implementar Gauss e chamar a funcao do dito cujo
 	return gauss(A, d)
 
@@ -51,18 +62,17 @@ def s_delta(t, h, M, A, B):
 	
 	return resp
 
-def deriv_f(t, h, M, A, B, tau):
-	j = 0
-	while(t > T[j]):
-		j += 1
-	i = j - 1
+# def deriv_f(t, h, M, A, B, tau):
+# 	j = 0
+# 	while(t > T[j]):
+# 		j += 1
+# 	i = j - 1
 	
-	# ja aplicado, na formula abaixo, a regra da cadeia
-	resp = -3*M[i] / (6*h[i+1]) * (T[i+1]^2 + 3*M[i+1] / (6*h[i+1]) * (t-T[i])^2 + A[i]
+# 	# ja aplicado, na formula abaixo, a regra da cadeia
+# 	resp = -3*M[i] / (6*h[i+1]) * (T[i+1]^2 + 3*M[i+1] / (6*h[i+1]) * (t-T[i])^2 + A[i]
 	
-	return resp
 
-def newton(u_0, f, DerivF, epsilon):
+def newton(u_0, f, DerivF, epsilon, A, B, tau, h):
 	u_k = u_0
 	
 	# passe as variaveis ", h, M, A, B, tau" à f() abaixo OU defina-as como variáveis globais/acessíveis para f()
