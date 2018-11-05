@@ -5,48 +5,49 @@ X = [2.00, 1.81, 1.64, 1.49, 1.36, 1.25, 1.16, 1.09, 1.04, 1.01, 1]
 x00 = ( (X[2] - X[1])/(T[2] - T[1]) - (X[1] - X[0])/(T[1] - T[0]) )/(T[2] - T[0])
 xnn = lambda n: ( (X[n] - X[n-1])/(T[n] - T[n-1]) - (X[n-1] - X[n-2])/(T[n-1] - T[n-2]) )/(T[n] - T[n-2])
 
-def h(v):
-	n = len(v)
-	# Instancia h como vetor vazio com tamanho n - 1
-	h = np.empty(n - 1)
+def h(T):
+	n = len(T)
+	h = np.zeros(n - 1)
 
-	# Valores de h são as diferenças entre valores de v
+	# Valores de h são as diferenças entre valores de t
 	for i in range(n - 1):
-		h[i] = v[i+1] - v[i]
+		h[i] = T[i+1] - T[i]
 	return h
 
-def monta_matriz(n):
+def mi_array(h):
+	n = len(h) - 1
+	mi = np.zeros(n)
+
+	for i in range(1, n):
+		print('i = {}, n = {}, i == (n - 1) = {}'.format(i, n, i == (n - 1)))
+		mi[i-1] = h[i]/(h[i]+h[i+1])
+		print('mi = {}, i-1 = {}'.format(mi, i-1))
+
+	return mi
+
+def lambda_array(h):
+	n = len(h) - 1
+	lambda_array = np.zeros(n)
+
+	for i in range(n):
+		lambda_array[i] = 0 if i == 0 else h[i+1]/(h[i]+h[i+1])
+
+	return lambda_array
+
+def make_matrix(n, mi_array, lambda_array):
 	# Instancia matrix nxn
-	# preenchida com 0
-	A = np.full((n, n), 0.0, dtype=float)
-	print(A)
+	A = np.zeros((n, n))
 
 	for i in range(n):
 		A[i][i] = 2
 		if i != (n - 1):
-			A[i][i+1] = .5
-			A[i+1][i] = .5
+			A[i][i+1] = lambda_array[i]
+			A[i+1][i] = mi_array[i]
 	
 	return A
 
-def mi_array(h, n):
-	mi = np.full(n, 0.0, dtype=float)
-
-	for i in range(n):
-		mi[i] = h[i]/(h[i]+h[i+1])
-
-	return mi
-
-def lambda_array(h, n):
-	lambda_array = np.full(n, 0.0, dtype=float)
-
-	for i in range(n):
-		lambda_array[i] = h[i+1]/(h[i]+h[i+1])
-
-	return lambda_array
-
 def d(h, n):
-	d = np.full(n, 0.0, dtype=float)
+	d = np.zeros(n)
 
 	for i in range(n):
 		d[i] = (6/(h[i] + h[i+1]))*( (X[i+1]-X[i]/h[i+1]) - (X[i] - X[i-1])/h[i] )
@@ -54,7 +55,7 @@ def d(h, n):
 	return d
 
 def B(M, h, n):
-	B = np.full(n, 0.0, dtype=float)
+	B = np.zeros(n)
 
 	for i in range(n):
 		B[i] = X[i] - (M[i]/6) * h[i+1]**2
@@ -76,7 +77,7 @@ def A(M, h, n):
 def monta_vetor(n, x00, xnn):
 	# Instancia matrix nxn
 	# preenchida com 0
-	d = np.full((n, n), 0.0, dtype=float)
+	d = np.zeros((n, n))
 
 	d[1,1] = 2*x00
 	d[n+1, 1] = 2*xnn
@@ -87,8 +88,8 @@ def monta_vetor(n, x00, xnn):
 	return d
 
 # VETOR DE VALORES M 
-def M(n, x00, xnn):
-	A = monta_matriz(n)
+def M(n, x00, xnn, mi, lambda_array):
+	A = make_matrix(n, mi, lambda_array)
 	d = monta_vetor(n, x00, xnn)
 	# implementar Gauss e chamar a funcao do dito cujo
 	return gauss(A, d)
