@@ -7,6 +7,8 @@ def monta_h(v):
 	n = len(v)
 	# Instancia h como vetor vazio com tamanho n - 1
 	h = np.empty(n - 1)
+
+	# Valores de h são as diferenças entre valores de v
 	for i in range(n - 1):
 		h[i] = v[i+1] - v[i]
 	return h
@@ -15,11 +17,13 @@ def monta_matriz(n):
 	# Instancia matrix nxn
 	# preenchida com 0
 	A = np.full((n, n), 0.0, dtype=float)
+	print(A)
 
 	for i in range(n):
 		A[i][i] = 2
-		A[i][i+1] = .5
-		A[i+1][i] = .5
+		if i != (n - 1):
+			A[i][i+1] = .5
+			A[i+1][i] = .5
 	
 	return A
 
