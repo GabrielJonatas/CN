@@ -2,8 +2,10 @@ import numpy as np
 
 T = np.arange(0, 1.1, .1, dtype=float)
 X = [2.00, 1.81, 1.64, 1.49, 1.36, 1.25, 1.16, 1.09, 1.04, 1.01, 1]
+x00 = ( (X[2] - X[1])/(T[2] - T[1]) - (X[1] - X[0])/(T[1] - T[0]) )/(T[2] - T[0])
+xnn = lambda n: ( (X[n] - X[n-1])/(T[n] - T[n-1]) - (X[n-1] - X[n-2])/(T[n-1] - T[n-2]) )/(T[n] - T[n-2])
 
-def monta_h(v):
+def h(v):
 	n = len(v)
 	# Instancia h como vetor vazio com tamanho n - 1
 	h = np.empty(n - 1)
@@ -26,6 +28,47 @@ def monta_matriz(n):
 			A[i+1][i] = .5
 	
 	return A
+
+def mi_array(h, n):
+	mi = np.full(n, 0.0, dtype=float)
+
+	for i in range(n):
+		mi[i] = h[i]/(h[i]+h[i+1])
+
+	return mi
+
+def lambda_array(h, n):
+	lambda_array = np.full(n, 0.0, dtype=float)
+
+	for i in range(n):
+		lambda_array[i] = h[i+1]/(h[i]+h[i+1])
+
+	return lambda_array
+
+def d(h, n):
+	d = np.full(n, 0.0, dtype=float)
+
+	for i in range(n):
+		d[i] = (6/(h[i] + h[i+1]))*( (X[i+1]-X[i]/h[i+1]) - (X[i] - X[i-1])/h[i] )
+
+	return d
+
+def B(M, h, n):
+	B = np.full(n, 0.0, dtype=float)
+
+	for i in range(n):
+		B[i] = X[i] - (M[i]/6) * h[i+1]**2
+
+	return B
+
+def A(M, h, n):
+	A = np.full(n, 0.0, dtype=float)
+
+	for i in range(n):
+		A[i] = (X[i+1] - X[i])/h[i+1] - ((M[i+1] - M[i])/6)*h[i+1]
+
+	return A
+
 
 # x00 = 2a DERIVADA DE x0
 # xnn = 2a DERIVADA DE xn
@@ -63,7 +106,7 @@ def s_delta(t, h, M, A, B):
 	i = j - 1
 
 	# SDelta = ..., para t em [ti, ti+1], sendo Mi, Ai e Bi constantes que dependem de Delta
-	resp = (M[i] / 6*h[i+1])*(T[i+1] - t)^3 + (M[i+1] / 6*h[i+1])*(t - T[i])^3 + A[i]*(t - T[i]) + B[i]
+	resp = (M[i] / 6*h[i+1])*(T[i+1] - t)**3 + (M[i+1] / 6*h[i+1])*(t - T[i])**3 + A[i]*(t - T[i]) + B[i]
 	
 	return resp
 
@@ -74,7 +117,7 @@ def s_delta(t, h, M, A, B):
 # 	i = j - 1
 	
 # 	# ja aplicado, na formula abaixo, a regra da cadeia
-# 	resp = -3*M[i] / (6*h[i+1]) * (T[i+1]^2 + 3*M[i+1] / (6*h[i+1]) * (t-T[i])^2 + A[i]
+# 	resp = -3*M[i] / (6*h[i+1]) * (T[i+1]**2 + 3*M[i+1] / (6*h[i+1]) * (t-T[i])**2 + A[i]
 	
 
 def newton(u_0, f, DerivF, epsilon, A, B, tau, h):
@@ -85,7 +128,7 @@ def newton(u_0, f, DerivF, epsilon, A, B, tau, h):
 		u_k = u_k - f(u_k)/DerivF(u_k)
 
 # SEÇÃO 4 - Algoritmo de busca binária
-def buscaBinaria(lista, t):
+def busca_binaria(lista, t):
 	print("t = {}".format(t))
 	m = 0
 	M = len(lista)-1
@@ -100,11 +143,9 @@ def buscaBinaria(lista, t):
 			M = k
 	return [m, M]
 
-# Testes da busca binária
-testlist = [0, 1, 2, 8, 13, 17, 19, 32, 42,]
-print(testlist)
-print(buscaBinaria(testlist, 3))
-print(buscaBinaria(testlist, 13))
-# print("================================")
-# print(xbuscaBinaria(testlist, 3))
-# print(xbuscaBinaria(testlist, 13))
+if __name__ == "__main__":
+	# Testes da busca binária
+	testlist = [0, 1, 2, 8, 13, 17, 19, 32, 42,]
+	print(testlist)
+	print(busca_binaria(testlist, 3))
+	print(busca_binaria(testlist, 13))
