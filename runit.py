@@ -5,10 +5,13 @@ import numpy as np
 
 # T = np.arange(0, 30)
 T = np.arange(0, 10)
+# x00 = 
+# xnn = 
 h = al.h(T)
 mi = al.mi_array(h)
 lambda_array = al.lambda_array(h)
 matrix = al.make_matrix(len(h), mi, lambda_array)
+d = al.d(h) # needs to pass x00!!!
 
 
 shape = (3, 3)

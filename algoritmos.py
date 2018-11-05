@@ -46,10 +46,13 @@ def make_matrix(n, mi_array, lambda_array):
 	
 	return A
 
-def d(h, n):
-	d = np.zeros(n)
+def d(h, x00):
+	n = len(h) - 1
+	d = np.zeros(n - 1)
+	
+	d[0] = x00
 
-	for i in range(n):
+	for i in range(1, n):
 		d[i] = (6/(h[i] + h[i+1]))*( (X[i+1]-X[i]/h[i+1]) - (X[i] - X[i-1])/h[i] )
 
 	return d
