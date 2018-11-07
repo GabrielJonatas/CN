@@ -17,9 +17,7 @@ M = np.zeros(len(M_values))
 i = 0
 for k in M_values:
     M[i] = float(M_values[k])
-    print(M[i])
     i += 1
-# print('M = \n{}'.format(M))
 
 B = al.B(M, h, n)
 A = al.A(M, h, n)
