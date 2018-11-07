@@ -1,5 +1,5 @@
 import numpy as np
-from sympy import Matrix, linsolve
+from sympy import Matrix, linsolve, solve_linear_system, symbols
 
 T = np.arange(0, 30)
 epsilon = 10**-3
@@ -51,13 +51,14 @@ def make_matrix(n, mi_array, lambda_array):
 	
 	return A
 
-def d(h, x00):
-	n = len(h) - 1
+def make_d(h, x00, xnn):
+	n = len(h)
 	d = np.zeros(n)
 	
-	d[0] = x00
+	d[0] = 2*x00
+	d[n-1] = 2*xnn
 
-	for i in range(1, n):
+	for i in range(1, n-1):
 		d[i] = (6/(h[i] + h[i+1]))*( (X[i+1]-X[i]/h[i+1]) - (X[i] - X[i-1])/h[i] )
 
 	return d
@@ -79,31 +80,34 @@ def A(M, h, n):
 	return A
 
 
-# x00 = 2a DERIVADA DE x0
-# xnn = 2a DERIVADA DE xn
-# calcule x00 & xnn A PARTIR DO DEFINIDO NO SLIDE, TEM FORMULA DE APROXIMACAO PRA AMBOS
-def monta_vetor(n, x00, xnn):
-	# Instancia matrix nxn
-	# preenchida com 0
-	d = np.zeros((n, n))
-
-	d[1,1] = 2*x00
-	d[n+1, 1] = 2*xnn
-	
-	for i in range(2, n+1):
-		d[i, 1] = 6*(2*(X[i+1] - X[i]) - 2*X*(X[i] - X[i-1]))
-	
-	return d
-
 # VETOR DE VALORES M 
-def M_gauss(n, x00, xnn, mi, lambda_array):
+def M_gauss(n, x00, xnn, mi, lambda_array, h):
 	A = make_matrix(n, mi, lambda_array)
-	d = monta_vetor(n, x00, xnn)
+	d = make_d(h, x00, xnn)
 	return gauss(A, d)
 
 # solucao de sistema por Gauss
 def gauss(A, d):
-	return linsolve((Matrix(A), Matrix(d))).args[0]
+	print('A =\n{}\nd =\n{}'.format(A, d))
+
+	C = np.zeros((len(A), len(A[0]) + 1))
+	print('len(A) = {}, len(A[0]) = {}'.format(len(A), len(A[0])))
+	print('len(C) = {}, len(C[0]) = {}'.format(len(C), len(C[0])))
+	print('len(d) = {}, d = {}'.format(len(d), d))
+	
+	for i in range(len(A)):
+		for j in range(len(A[0]) + 1):
+			C[i][j] = A[i][j] if j < len(A[0]) else d[i]
+	system = Matrix(C)
+
+	symbols = M_symbols_for_amount(len(A))
+	return solve_linear_system(system, *symbols)
+
+def M_symbols_for_amount(n):
+	s = []
+	for i in range(n):
+		s.append(symbols('M{}'.format(i)))
+	return s
 
 def s_delta(t, h, M, A, B):
 	j = 0
