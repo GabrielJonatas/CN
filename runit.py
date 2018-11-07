@@ -3,15 +3,21 @@ import gauss
 import algoritmos as al
 import numpy as np
 
-# T = np.arange(0, 30)
-T = np.arange(0, 10)
-# x00 = 
-# xnn = 
-h = al.h(T)
+x00 = al.x00
+xnn = al.xnn(28)
+
+h = al.h(al.T)
+n = len(h)
+
 mi = al.mi_array(h)
 lambda_array = al.lambda_array(h)
-matrix = al.make_matrix(len(h), mi, lambda_array)
-d = al.d(h) # needs to pass x00!!!
+matrix = al.make_matrix(n, mi, lambda_array)
+d = al.d(h, x00)
+
+M = al.M_gauss(n, x00, xnn, mi, lambda_array)
+
+B = al.B(M, h, n)
+A = al.A(M, h, n)
 
 
 shape = (3, 3)

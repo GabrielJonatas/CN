@@ -1,7 +1,14 @@
 import numpy as np
+from sympy import Matrix, linsolve
 
-T = np.arange(0, 1.1, .1, dtype=float)
-X = [2.00, 1.81, 1.64, 1.49, 1.36, 1.25, 1.16, 1.09, 1.04, 1.01, 1]
+T = np.arange(0, 30)
+epsilon = 10**-3
+X = [
+	0, 1, 2.4, 4.1, 6, 8.2, 10.6, 13.4, 16.4, 19.7,
+	23.3, 27, 31.2, 35.5, 40.1, 45, 50.2, 55.6, 61.3, 67.3,
+	73.6, 80.1, 86.9, 94, 101.3, 109, 116.9, 125, 133.4, 142.1
+]
+
 x00 = ( (X[2] - X[1])/(T[2] - T[1]) - (X[1] - X[0])/(T[1] - T[0]) )/(T[2] - T[0])
 xnn = lambda n: ( (X[n] - X[n-1])/(T[n] - T[n-1]) - (X[n-1] - X[n-2])/(T[n-1] - T[n-2]) )/(T[n] - T[n-2])
 
@@ -19,9 +26,7 @@ def mi_array(h):
 	mi = np.zeros(n)
 
 	for i in range(1, n):
-		print('i = {}, n = {}, i == (n - 1) = {}'.format(i, n, i == (n - 1)))
 		mi[i-1] = h[i]/(h[i]+h[i+1])
-		print('mi = {}, i-1 = {}'.format(mi, i-1))
 
 	return mi
 
@@ -48,7 +53,7 @@ def make_matrix(n, mi_array, lambda_array):
 
 def d(h, x00):
 	n = len(h) - 1
-	d = np.zeros(n - 1)
+	d = np.zeros(n)
 	
 	d[0] = x00
 
@@ -91,17 +96,14 @@ def monta_vetor(n, x00, xnn):
 	return d
 
 # VETOR DE VALORES M 
-def M(n, x00, xnn, mi, lambda_array):
+def M_gauss(n, x00, xnn, mi, lambda_array):
 	A = make_matrix(n, mi, lambda_array)
 	d = monta_vetor(n, x00, xnn)
-	# implementar Gauss e chamar a funcao do dito cujo
 	return gauss(A, d)
 
 # solucao de sistema por Gauss
 def gauss(A, d):
-	# DO THISSSSSSSSSSSSSS
-	# https://martin-thoma.com/solving-linear-equations-with-gaussian-elimination/
-	return
+	return linsolve((Matrix(A), Matrix(d))).args[0]
 
 def s_delta(t, h, M, A, B):
 	j = 0
