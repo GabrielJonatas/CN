@@ -66,7 +66,7 @@ def make_d(h, x00, xnn):
 def B(M, h, n):
 	B = np.zeros(n)
 
-	for i in range(n):
+	for i in range(n - 1):
 		B[i] = X[i] - (M[i]/6) * h[i+1]**2
 
 	return B
@@ -74,7 +74,7 @@ def B(M, h, n):
 def A(M, h, n):
 	A = np.full(n, 0.0, dtype=float)
 
-	for i in range(n):
+	for i in range(n - 1):
 		A[i] = (X[i+1] - X[i])/h[i+1] - ((M[i+1] - M[i])/6)*h[i+1]
 
 	return A
@@ -86,7 +86,6 @@ def M_gauss(n, x00, xnn, mi, lambda_array, h):
 	d = make_d(h, x00, xnn)
 	return gauss(A, d)
 
-# solucao de sistema por Gauss
 def gauss(A, d):
 	print('A =\n{}\nd =\n{}'.format(A, d))
 
@@ -94,7 +93,8 @@ def gauss(A, d):
 	print('len(A) = {}, len(A[0]) = {}'.format(len(A), len(A[0])))
 	print('len(C) = {}, len(C[0]) = {}'.format(len(C), len(C[0])))
 	print('len(d) = {}, d = {}'.format(len(d), d))
-	
+
+	# Preenche matriz C com o sistema completo: Matriz A + Vetor d	
 	for i in range(len(A)):
 		for j in range(len(A[0]) + 1):
 			C[i][j] = A[i][j] if j < len(A[0]) else d[i]
