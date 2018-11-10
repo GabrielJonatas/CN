@@ -9,8 +9,8 @@ X = [
 	73.6, 80.1, 86.9, 94, 101.3, 109, 116.9, 125, 133.4, 142.1
 ]
 
-x00 = ( (X[2] - X[1])/(T[2] - T[1]) - (X[1] - X[0])/(T[1] - T[0]) )/(T[2] - T[0])
-xnn = lambda n: ( (X[n] - X[n-1])/(T[n] - T[n-1]) - (X[n-1] - X[n-2])/(T[n-1] - T[n-2]) )/(T[n] - T[n-2])
+x00 = lambda T=T: ( (X[2] - X[1])/(T[2] - T[1]) - (X[1] - X[0])/(T[1] - T[0]) )/(T[2] - T[0])
+xnn = lambda T, n: ( (X[n] - X[n-1])/(T[n] - T[n-1]) - (X[n-1] - X[n-2])/(T[n-1] - T[n-2]) )/(T[n] - T[n-2])
 
 def h(T):
 	n = len(T)
@@ -76,6 +76,7 @@ def A(M, h, n):
 
 	for i in range(n - 1):
 		A[i] = (X[i+1] - X[i])/h[i+1] - ((M[i+1] - M[i])/6)*h[i+1]
+		print('A[{}] = {}'.format(i, A[i]))
 
 	return A
 
@@ -130,15 +131,15 @@ def s_delta(t, h, M, A, B):
 # 	resp = -3*M[i] / (6*h[i+1]) * (T[i+1]**2 + 3*M[i+1] / (6*h[i+1]) * (t-T[i])**2 + A[i]
 	
 
-def newton(u_0, f, DerivF, epsilon, A, B, tau, h):
+def newton(u_0, f, DerivF, epsilon, A, B, M, tau, h):
 	u_k = u_0
 	
-	# passe as variaveis ", h, M, A, B, tau" à f() abaixo OU defina-as como variáveis globais/acessíveis para f()
+	# passe as variaveis "h, M, A, B, tau" à f() abaixo OU defina-as como variáveis globais/acessíveis para f()
 	while (f(u_k - epsilon, h, M, A, B, tau) * f(u_k + epsilon, h, M, A, B, tau) > 0):
 		u_k = u_k - f(u_k)/DerivF(u_k)
 
 # SEÇÃO 4 - Algoritmo de busca binária
-def busca_binaria(lista, t):
+def binary_search(lista, t):
 	print("t = {}".format(t))
 	m = 0
 	M = len(lista)-1
@@ -157,5 +158,5 @@ if __name__ == "__main__":
 	# Testes da busca binária
 	testlist = [0, 1, 2, 8, 13, 17, 19, 32, 42,]
 	print(testlist)
-	print(busca_binaria(testlist, 3))
-	print(busca_binaria(testlist, 13))
+	print(binary_search(testlist, 3))
+	print(binary_search(testlist, 13))
