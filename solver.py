@@ -1,7 +1,10 @@
 import numpy as np
 from math import log
 
-def jacobi(A, d, tolerance, mi, lambda_array):
+def jacobi(A, d, mi, lambda_array):
+        # default
+        n_max = 100
+        tolerance = np.e**-4
         epsilon = 10**-8
         k = 0
         x_0 = [0 for i in range(0, 30)]
@@ -11,6 +14,7 @@ def jacobi(A, d, tolerance, mi, lambda_array):
 
         sigma = np.zeros(len(A))
         for i in range(len(A)):
+            # print('i = {}\nsigma[i] = {}\nA[i][i] = {}'.format(i, sigma[i], A[i][i]))
             sigma[i] = (1/A[i][i]) * (sum(A[i]) - A[i][i])
 
 

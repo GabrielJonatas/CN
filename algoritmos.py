@@ -76,7 +76,6 @@ def A(M, h, n):
 
 	for i in range(n - 1):
 		A[i] = (X[i+1] - X[i])/h[i+1] - ((M[i+1] - M[i])/6)*h[i+1]
-		print('A[{}] = {}'.format(i, A[i]))
 
 	return A
 
@@ -88,12 +87,8 @@ def M_gauss(n, x00, xnn, mi, lambda_array, h):
 	return gauss(A, d)
 
 def gauss(A, d):
-	print('A =\n{}\nd =\n{}'.format(A, d))
 
 	C = np.zeros((len(A), len(A[0]) + 1))
-	print('len(A) = {}, len(A[0]) = {}'.format(len(A), len(A[0])))
-	print('len(C) = {}, len(C[0]) = {}'.format(len(C), len(C[0])))
-	print('len(d) = {}, d = {}'.format(len(d), d))
 
 	# Preenche matriz C com o sistema completo: Matriz A + Vetor d	
 	for i in range(len(A)):
@@ -140,14 +135,12 @@ def newton(u_0, f, DerivF, epsilon, A, B, M, tau, h):
 
 # SEÇÃO 4 - Algoritmo de busca binária
 def binary_search(lista, t):
-	print("t = {}".format(t))
 	m = 0
 	M = len(lista)-1
 
 	while abs(M - m) > 1:
 		k = (m + M)//2
 		tk = lista[k]
-		print("k = {} para m = {} & M = {} [tk = {}]".format(k, m, M, tk))
 		if t > tk:
 			m = k
 		if t <= tk:

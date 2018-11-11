@@ -1,4 +1,5 @@
 import algoritmos
+import solver
 import numpy as np
 
 T = algoritmos.T
@@ -26,3 +27,7 @@ for k in M_values:
 B = algoritmos.B(M, h, n)
 A = algoritmos.A(M, h, n)
 
+y = algoritmos.make_d(h, x00, xnn)
+
+# Resolve por Jacobi
+solver.jacobi(matrix, y, mi, lambda_array)
