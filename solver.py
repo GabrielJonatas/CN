@@ -1,40 +1,53 @@
+import math
 import numpy as np
-from math import log
 
-def jacobi(A, d, mi, lambda_array):
-        # default
-        n_max = 100
-        tolerance = np.e**-4
-        epsilon = 10**-8
-        k = 0
-        x_0 = [0 for i in range(0, 30)]
-        x_old = x_0
-        x_new = x_0
-        n = len(x_0)
+def jacobi(A, d, mi, lambda_array, n_max=100):
+    # default
+    tolerance = 10**-8
+    epsilon = tolerance + 1
+    k = 0
+    x_0 = [0 for i in range(0, 29)]
+    x_old = list(np.copy(x_0))
+    x_new = list(np.copy(x_0))
+    n = len(x_0)
 
-        sigma = np.zeros(len(A))
-        for i in range(len(A)):
-            # print('i = {}\nsigma[i] = {}\nA[i][i] = {}'.format(i, sigma[i], A[i][i]))
-            sigma[i] = (1/A[i][i]) * (sum(A[i]) - A[i][i])
+    sigma = np.zeros(len(A))
+    for i in range(len(A)):
+        # print('i = {}\nsigma[i] = {}\nA[i][i] = {}'.format(i, sigma[i], A[i][i]))
+        sigma[i] = (1/A[i][i]) * (sum(A[i]) - A[i][i])
+    sigma = max(sigma)
+    # print('sigma = {}'.format(sigma))
 
+    
 
-        while epsilon > tolerance and k < n_max:
-            print('[JACOBI] Iteration {}'.format(k))
+    while epsilon > tolerance and k < n_max:
+        # print('[JACOBI] Iteration {}'.format(k))
+        if k == 1:
 
-            x_new[0] = .5 * (d[0] - lambda_array[0]*x_old[1])
+            norm = infinity_norm(x_new, x_0)
+            print('Norma infinita: {}'.format(norm))
 
-            for i in range(1, n-1):
-                x_new[i] = .5 * (d[i] - mi[i]*x_old[i-1] - lambda_array[i]*x_old[i+1])
-            
-            x_new[n] = .5 * (d[n] - mi[n]*x_old[n-1])
+            minimum_n_decimal = math.log( (tolerance * (1 - sigma)) / (norm) ) / math.log(sigma)
+            print('Minimo numero de iterações, decimal: {}'.format(minimum_n_decimal))
+            n_max = math.ceil(minimum_n_decimal)
+            print('Minimo numero de iterações, arredondado: {}'.format(n_max))
 
+        x_new[0] = .5 * (d[0] - lambda_array[0]*x_old[1])
 
-            subtract = lambda x1, x2: x1 - x2
-            new_minus_old = list(map(subtract, x_new, x_old))
-            new_minus_old = [ -x if x < 0 else x for x in new_minus_old ]
-            epsilon = max(new_minus_old)
-
-            x_old = x_new
-            k += 1
+        for i in range(1, n-1):
+            x_new[i] = .5 * (d[i] - mi[i]*x_old[i-1] - lambda_array[i]*x_old[i+1])
         
-        return x_new
+        x_new[n-1] = .5 * (d[len(d) - 1] - mi[len(mi) - 1]*x_old[n-1])
+
+        epsilon = infinity_norm(x_new, x_old)
+
+        x_old = list(np.copy(x_new))
+        k += 1
+    
+    return x_new
+
+def infinity_norm(v1, v2):
+    subtract = lambda x1, x2: x1 - x2
+    new_minus_old = list(map(subtract, v1, v2))
+    new_minus_old = [ -x if x < 0 else x for x in new_minus_old ]
+    return max(new_minus_old)

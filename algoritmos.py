@@ -9,8 +9,35 @@ X = [
 	73.6, 80.1, 86.9, 94, 101.3, 109, 116.9, 125, 133.4, 142.1
 ]
 
-x00 = lambda T=T: ( (X[2] - X[1])/(T[2] - T[1]) - (X[1] - X[0])/(T[1] - T[0]) )/(T[2] - T[0])
-xnn = lambda T, n: ( (X[n] - X[n-1])/(T[n] - T[n-1]) - (X[n-1] - X[n-2])/(T[n-1] - T[n-2]) )/(T[n] - T[n-2])
+x00 = lambda T=T, X=X: ( (X[2] - X[1])/(T[2] - T[1]) - (X[1] - X[0])/(T[1] - T[0]) )/(T[2] - T[0])
+xnn = lambda T, n, X=X: ( (X[n] - X[n-1])/(T[n] - T[n-1]) - (X[n-1] - X[n-2])/(T[n-1] - T[n-2]) )/(T[n] - T[n-2])
+
+# Tarefa 1, Exercicio 1
+# Determinação de dominancia diagonal estrita de uma matriz
+def is_strictly_diagonal_dominant(A):
+	for i in range(len(A)):
+		line_sum = 0
+		
+		for j in range(len(A[0])):
+			if j != i:
+				line_sum += A[i][j]
+		
+		if A[i][i] < line_sum:
+			print('Linha {0} NÃO é diagonal dominante.\t\tA[{0}][{0}] = {1}\tSoma da linha = {2}'.format(i, A[i][i], line_sum))
+			return False
+	
+	# Passou por todas linhas e nenhuma soma deu maior que a diagonal
+	return True
+
+# Tarefa 1, Exercicio 1
+# Calculo de sigma
+def make_sigma(A):
+	sigma = np.zeros(len(A))
+	
+	for i in range(len(A)):
+		sigma[i] = (1/abs(A[i][i])) * (sum(A[i]) - A[i][i])
+	
+	return max(sigma)
 
 def h(T):
 	n = len(T)
@@ -64,7 +91,7 @@ def make_d(h, x00, xnn):
 	return d
 
 def B(M, h, n):
-	B = np.zeros(n)
+	B = np.zeros(n - 1)
 
 	for i in range(n - 1):
 		B[i] = X[i] - (M[i]/6) * h[i+1]**2
@@ -72,7 +99,7 @@ def B(M, h, n):
 	return B
 
 def A(M, h, n):
-	A = np.full(n, 0.0, dtype=float)
+	A = np.zeros(n - 1)
 
 	for i in range(n - 1):
 		A[i] = (X[i+1] - X[i])/h[i+1] - ((M[i+1] - M[i])/6)*h[i+1]
