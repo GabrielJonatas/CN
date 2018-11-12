@@ -50,3 +50,4 @@ norm = solver.infinity_norm(jacobi, M)
 print('\nNORMA INFINITA --> || JACOBI - GAUSS ||∞ = {}'.format(norm))
 
 print('\n========================= TAREFA 2 ATIVIDADE 1 =========================')
+result = newton(u_0, epsilon, A, B, M, 13, h)
