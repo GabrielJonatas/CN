@@ -25,7 +25,6 @@ for k in M_values:
     i += 1
 
 
-
 B = algoritmos.B(M, h, n)
 A = algoritmos.A(M, h, n)
 
