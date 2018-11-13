@@ -146,8 +146,8 @@ def s_delta(t, h, M, A, B):
 def f(t, h, M, A, B, tau):
 	group_number = tau
 	distance = 100 - 2*group_number
-	interpolation_interval = algoritmos.binary_search(algoritmos.X, distance)
-	s_t = algoritmos.s_delta(t, h, M, A, B)
+	interpolation_interval = binary_search(X, distance)
+	s_t = s_delta(t, h, M, A, B)
 	return s_t - distance
 
 def deriv_f(t, h, M, A, B, tau):
@@ -156,15 +156,27 @@ def deriv_f(t, h, M, A, B, tau):
 		j += 1
 	i = j - 1
 	
-# 	# ja aplicado, na formula abaixo, a regra da cadeia
-	resp = -3*M[i] / (6*h[i+1]) * (T[i+1]**2 + 3*M[i+1] / (6*h[i+1]) * (t-T[i])**2 + A[i]
-	
+	resp = (-3*T[i+1]**2 + 6*T[i+1]*t)*(M[i]/6*h[i+1]) + (-6*t*T[i] + 3*T[i]**2) * (M[i+1]/6*h[i+1]) + A[i]
+ 	# ja aplicado, na formula abaixo, a regra da cadeia
+	# resp = -3*M[i] / (6*h[i+1]) * (T[i+1]**2 + 3*M[i+1] / (6*h[i+1]) * (t-T[i])**2 + A[i]
+
+	return resp
+
+def second_deriv_f(t, h, M):
+	j = 0
+	while(t > T[j]):
+		j += 1
+	i = j - 1
+
+	resp = (6*T[i+1]*M[i] - 6*T[i]*M[i+1])/6*h[i+1]
+
+	return resp
 
 def newton(u_0, epsilon, A, B, M, tau, h):
 	u_k = u_0
 	
 	while (f(u_k - epsilon, h, M, A, B, tau) * f(u_k + epsilon, h, M, A, B, tau) > 0):
-		u_k = u_k - f(u_k)/deriv_f(u_k, h, M, A, B, tau)
+		u_k = u_k - f(u_k, h, M, A, B, tau)/deriv_f(u_k, h, M, A, B, tau)
 
 # SEÇÃO 4 - Algoritmo de busca binária
 def binary_search(lista, t):

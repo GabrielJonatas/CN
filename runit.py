@@ -50,4 +50,7 @@ norm = solver.infinity_norm(jacobi, M)
 print('\nNORMA INFINITA --> || JACOBI - GAUSS ||∞ = {}'.format(norm))
 
 print('\n========================= TAREFA 2 ATIVIDADE 1 =========================')
-result = newton(u_0, epsilon, A, B, M, 13, h)
+f205 = algoritmos.f(20.5, h, M, A, B, 13)
+f21 = algoritmos.f(21, h, M, A, B, 13)
+print('Intervalo [{0}, {1}]\nf({0})*f({1}) = {2} > 0'.format(20.5, 21, f205 * f21))
+algoritmos.newton(21, 10**-8, A, B, M, 13, h)
