@@ -34,9 +34,9 @@ def jacobi(A, d, mi, lambda_array, n_max=100):
         x_new[0] = .5 * (d[0] - lambda_array[0] * x_old[1])
 
         for i in range(1, n - 1):
-            x_new[i] = .5 * (d[i] - mi[i]*x_old[i - 1] - lambda_array[i]*x_old[i + 1])
+            x_new[i] = .5 * (d[i] - mi[i] * x_old[i - 1] - lambda_array[i] * x_old[i + 1])
 
-        x_new[n - 1] = .5 * (d[len(d) - 1] - mi[len(mi) - 1]*x_old[n - 1])
+        x_new[n - 1] = .5 * (d[len(d) - 1] - mi[len(mi) - 1] * x_old[n - 1])
 
         epsilon = infinity_norm(x_new, x_old)
 
