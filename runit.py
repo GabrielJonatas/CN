@@ -33,20 +33,20 @@ y = algoritmos.make_d(h, x00, xnn)
 
 print('\n========================= TAREFA 1 ATIVIDADE 1 =========================')
 estritamente_dominante = algoritmos.is_strictly_diagonal_dominant(matrix)
-print('É estritamente dominante? --> {}'.format(estritamente_dominante))
+print(f'É estritamente dominante? --> {estritamente_dominante}')
 sigma = algoritmos.make_sigma(matrix)
-print('Valor de Sigma: {}'.format(sigma))
+print(f'Valor de Sigma: {sigma}')
 
 print('\n========================= TAREFA 1 | ATIVIDADES 2 & 4 =========================')
 print('OBS: Calculamos a estimativa de número mínimo de iterações para a tolerância desejada DENTRO do método de Jacobi.')
 # Resolve por Jacobi
 jacobi = solver.jacobi(matrix, y, mi, lambda_array)
-print('\nSOLUCAO OBTIDA POR JACOBI:\n{}'.format(jacobi))
-print('\nSOLUCAO OBTIDA POR GAUSS:\n{}'.format(M))
+print(f'\nSOLUCAO OBTIDA POR JACOBI:\n{jacobi}')
+print(f'\nSOLUCAO OBTIDA POR GAUSS:\n{M}')
 
 print('\n========================= TAREFA 1 ATIVIDADE 3 =========================')
 norm = solver.infinity_norm(jacobi, M)
-print('\nNORMA INFINITA --> || JACOBI - GAUSS ||∞ = {}'.format(norm))
+print(f'\nNORMA INFINITA --> || JACOBI - GAUSS ||∞ = {norm}')
 
 print('\n========================= TAREFA 2 ATIVIDADE 1 =========================')
 f205 = algoritmos.f(20.5, h, M, A, B, 13)
