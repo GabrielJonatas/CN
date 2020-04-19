@@ -4,8 +4,8 @@ import numpy as np
 
 T = algoritmos.T
 
-x00 = algoritmos.x00(T)
-xnn = algoritmos.xnn(T, 28)
+x00 = algoritmos.x00()
+xnn = algoritmos.xnn(28)
 
 h = algoritmos.h(T)
 n = len(h)
@@ -51,5 +51,6 @@ print(f'\nNORMA INFINITA --> || JACOBI - GAUSS ||∞ = {norm}')
 print('\n========================= TAREFA 2 ATIVIDADE 1 =========================')
 f205 = algoritmos.f(20.5, h, M, A, B, 13)
 f21 = algoritmos.f(21, h, M, A, B, 13)
-print('Intervalo [{0}, {1}]\nf({0})*f({1}) = {2} > 0'.format(20.5, 21, f205 * f21))
+print(f'Intervalo [20.5, 21]')
+print(f'f(20.5)*f(21) = {f205 * f21} > 0')
 algoritmos.newton(21, 10**-8, A, B, M, 13, h)

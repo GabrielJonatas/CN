@@ -1,26 +1,23 @@
 import numpy as np
 from sympy import Matrix, linsolve, solve_linear_system, symbols
 
-T = np.arange(0, 30)
-n = len(T)
-epsilon = 10**-3
+# Dados da queda livre
+T = np.arange(0, 30)  # Vetor de tempo em segundos
 X = [
     0, 1, 2.4, 4.1, 6, 8.2, 10.6, 13.4, 16.4, 19.7,
     23.3, 27, 31.2, 35.5, 40.1, 45, 50.2, 55.6, 61.3, 67.3,
     73.6, 80.1, 86.9, 94, 101.3, 109, 116.9, 125, 133.4, 142.1
-]
+]  # Distância percorrida em queda livre ao longo do tempo
+
+epsilon = 10**-3
 
 
-def get_x00(T, X):
+def x00():
     return ((X[2] - X[1]) / (T[2] - T[1]) - (X[1] - X[0]) / (T[1] - T[0])) / (T[2] - T[0])
 
 
-def get_xnn(T, n, X):
+def xnn(n):
     return ((X[n] - X[n - 1]) / (T[n] - T[n - 1]) - (X[n - 1] - X[n - 2]) / (T[n - 1] - T[n - 2])) / (T[n] - T[n - 2])
-
-
-x00 = get_x00(T, X)
-xnn = get_xnn(T, n, X)
 
 
 # Tarefa 1, Exercicio 1
@@ -53,6 +50,9 @@ def make_sigma(A):
 
 
 def h(T):
+    """
+    h_i+1 = t_i+1 - t_i | i=0, 1, 2, ..., n
+    """
     n = len(T)
     h = np.zeros(n - 1)
 
@@ -150,7 +150,7 @@ def gauss(A, d):
 def M_symbols_for_amount(n):
     s = []
     for i in range(n):
-        s.append(symbols('M{}'.format(i)))
+        s.append(symbols(f'M{i}'))
     return s
 
 
