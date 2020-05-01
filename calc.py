@@ -2,11 +2,12 @@ import numpy as np
 from sympy import Matrix, linsolve, solve_linear_system, symbols
 
 # Dados da queda livre
-T = np.arange(0, 30)  # Vetor de tempo em segundos
+T = np.arange(0, 1.1, 0.1)  # np.arange(0, 30)  # Vetor de tempo em segundos
 X = [
-    0, 1, 2.4, 4.1, 6, 8.2, 10.6, 13.4, 16.4, 19.7,
-    23.3, 27, 31.2, 35.5, 40.1, 45, 50.2, 55.6, 61.3, 67.3,
-    73.6, 80.1, 86.9, 94, 101.3, 109, 116.9, 125, 133.4, 142.1
+    2.00, 1.81, 1.64, 1.49, 1.36, 1.25, 1.16, 1.09, 1.04, 1.01, 1.00
+    # 0, 1, 2.4, 4.1, 6, 8.2, 10.6, 13.4, 16.4, 19.7,
+    # 23.3, 27, 31.2, 35.5, 40.1, 45, 50.2, 55.6, 61.3, 67.3,
+    # 73.6, 80.1, 86.9, 94, 101.3, 109, 116.9, 125, 133.4, 142.1
 ]  # Distância percorrida em queda livre ao longo do tempo
 
 epsilon = 10**-3
@@ -59,12 +60,15 @@ def h(T):
     return h
 
 
+# VALORES DE µ (mi)
 def mi_array(h):
     n = len(h) - 1
     mi = np.zeros(n)
 
+    mi[0] = 0
+
     for i in range(1, n):
-        mi[i - 1] = h[i] / (h[i] + h[i + 1])
+        mi[i] = h[i] / (h[i] + h[i + 1])
 
     return mi
 
@@ -73,8 +77,10 @@ def lambda_array(h):
     n = len(h) - 1
     lambda_array = np.zeros(n)
 
-    for i in range(n):
-        lambda_array[i] = 0 if i == 0 else h[i + 1] / (h[i] + h[i + 1])
+    lambda_array[0] = 0
+
+    for i in range(1, n):
+        lambda_array[i] = h[i + 1] / (h[i] + h[i + 1])
 
     return lambda_array
 
@@ -137,10 +143,13 @@ def gauss(A, d):
     # Preenche matriz C com o sistema completo: Matriz A + Vetor d
     for i in range(len(A)):
         for j in range(len(A[0]) + 1):
+            # Não está de acordo com as regras da lista
             C[i][j] = A[i][j] if j < len(A[0]) else d[i]
     system = Matrix(C)
 
     symbols = M_symbols_for_amount(len(A))
+
+    # TODO: implementar Gauss de acordo com as regras da lista
     return solve_linear_system(system, *symbols)
 
 

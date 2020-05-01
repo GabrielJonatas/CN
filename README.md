@@ -1,1 +1,0 @@
-Numeric Calculus activity. UFABC, 2020.3

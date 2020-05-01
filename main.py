@@ -28,7 +28,7 @@ for k in M_values:
 B = calc.B(M, h, n)
 A = calc.A(M, h, n)
 
-y = calc.make_d(h, x00, xnn)
+d = calc.make_d(h, x00, xnn)
 
 
 print('\n========================= TAREFA 1 ATIVIDADE 1 =========================')
@@ -40,7 +40,7 @@ print(f'Valor de Sigma: {sigma}')
 print('\n========================= TAREFA 1 | ATIVIDADES 2 & 4 =========================')
 print('OBS: Calculamos a estimativa de número mínimo de iterações para a tolerância desejada DENTRO do método de Jacobi.')
 # Resolve por Jacobi
-jacobi = solver.jacobi(matrix, y, mi, lambda_array)
+jacobi = solver.jacobi(matrix, d, mi, lambda_array)
 print(f'\nSOLUCAO OBTIDA POR JACOBI:\n{jacobi}')
 print(f'\nSOLUCAO OBTIDA POR GAUSS:\n{M}')
 
