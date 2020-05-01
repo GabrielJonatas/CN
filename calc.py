@@ -136,12 +136,14 @@ def M_gauss(n, x00, xnn, mi, lambda_array, h):
     return gauss(A, d)
 
 
+# IMPLEMENTA MÉTODO DE GAUSS
 def gauss(A, d):
+    m = len(A)
 
     C = np.zeros((len(A), len(A[0]) + 1))
 
     # Preenche matriz C com o sistema completo: Matriz A + Vetor d
-    for i in range(len(A)):
+    for i in range(m):
         for j in range(len(A[0]) + 1):
             # Não está de acordo com as regras da lista
             C[i][j] = A[i][j] if j < len(A[0]) else d[i]
