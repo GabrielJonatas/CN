@@ -1,14 +1,14 @@
-Numeric Calculus activity. UFABC, 2020.3
+Atividade de Cálculo Numérico. UFABC, 2020.3
 
-# How can I run this?
+## Como rodar?
 
-First, you must install python: https://www.python.org/
+Primeiramente, instale o Python: https://www.python.org/
 
-Finally, install dependencies:
+Instale os requisitos do projeto:
 ```
 pip install -r requirements.txt
 ```
-Run the code:
+Rode o código:
 ```
 python main.py
 ```
