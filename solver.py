@@ -14,22 +14,22 @@ def jacobi(A, d, mi, lambda_array, n_max=100):
 
     sigma = np.zeros(len(A))
     for i in range(len(A)):
-        # print('i = {}\nsigma[i] = {}\nA[i][i] = {}'.format(i, sigma[i], A[i][i]))
+        # print(f'i = {i}\nsigma[i] = {sigma[i]}\nA[i][i] = {A[i][i]}')
         sigma[i] = (1 / A[i][i]) * (sum(A[i]) - A[i][i])
     sigma = max(sigma)
-    # print('sigma = {}'.format(sigma))
+    # print(f'sigma = {sigma}')
 
     while epsilon > tolerance and k < n_max:
-        # print('[JACOBI] Iteration {}'.format(k))
+        # print(f'[JACOBI] Iteration {k}'
         if k == 1:
 
             norm = infinity_norm(x_new, x_0)
-            print('Norma infinita: {}'.format(norm))
+            print(f'Norma infinita: {norm}'.format(norm))
 
             minimum_n_decimal = math.log((tolerance * (1 - sigma)) / (norm)) / math.log(sigma)
-            print('Minimo numero de iterações, decimal: {}'.format(minimum_n_decimal))
+            print(f'Minimo numero de iterações, decimal: {minimum_n_decimal}')
             n_max = math.ceil(minimum_n_decimal)
-            print('Minimo numero de iterações, arredondado: {}'.format(n_max))
+            print(f'Minimo numero de iterações, arredondado: {n_max}')
 
         x_new[0] = .5 * (d[0] - lambda_array[0] * x_old[1])
 

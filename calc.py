@@ -50,9 +50,6 @@ def make_sigma(A):
 
 
 def h(T):
-    """
-    h_i+1 = t_i+1 - t_i | i=0, 1, 2, ..., n
-    """
     n = len(T)
     h = np.zeros(n - 1)
 
