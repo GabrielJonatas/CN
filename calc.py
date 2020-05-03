@@ -227,8 +227,9 @@ def binary_search(lista, t):
         tk = lista[k]
         if t > tk:
             m = k
-        if t <= tk:
+        else:
             M = k
+    # TODO Deve voltar i = m e não o intervalo
     return [m, M]
 
 
@@ -238,3 +239,6 @@ if __name__ == "__main__":
     print(testlist)
     print(binary_search(testlist, 3))
     print(binary_search(testlist, 13))
+    # TODO O que deve acontecer se o tempo dado estiver fora dos intervalos?
+    print(binary_search(testlist, -1))
+    print(binary_search(testlist, 43))
