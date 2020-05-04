@@ -1,5 +1,5 @@
 import numpy as np
-from sympy import Matrix, linsolve, solve_linear_system, symbols
+# from sympy import Matrix, linsolve, solve_linear_system, symbols
 
 # Dados da queda livre
 T = np.arange(0, 1.1, 0.1)  # np.arange(0, 30)  # Vetor de tempo em segundos
@@ -137,23 +137,53 @@ def M_gauss(n, x00, xnn, mi, lambda_array, h):
 
 
 # IMPLEMENTA MÉTODO DE GAUSS
-def gauss(A, d):
-    m = len(A)
+def gauss(A, y, m=0):
+    if m == 0:
+        m = len(A)
+    for j in range(1, m):  # para j de 1 até m-1
+        find_pivot(A, y, j, m)
+    # print("\n")
+    # print(A)
+    for i in range(j+1, m+1):  # para i de 1 até m
+        mi = - (element(A, i, j) / element(A, j, j))
+        for k in range(j, m+1): # para k de j até m
+            set_element(A, i, k, element(A, i, k) + mi * element(A, j, k))
+        y[i-1] = y[i-1] + mi * y[j-1]
+        # print("\n")
+        # print(A)
+    x = np.zeros(len(y))  # Cria array e preenche com zeros
+    i = m
+    while (i >= 1):
+        x[i-1] = y[i-1]
+        for j in range(i+1, m+1):  # para j de i+1 até m
+            x[i-1] = x[i-1] - element(A, i, j) * x[j-1]
+        x[i-1] = x[i-1] / element(A, i, i)
+        i -= 1
+    # print(x)
+    return x
 
-    C = np.zeros((len(A), len(A[0]) + 1))
+def find_pivot(A, y, j, m):
+    if element(A, j, j) == 0:
+        matrix_singular = True
+        for k in range(j+1, m+1): # para k de j+1 até m
+            if element(A, k, j) != 0:
+                matrix_singular = False
+                swap_lines(A, j, k)
+                swap_lines(y, j, k)
+                break
+        if matrix_singular:
+            raise Exception('Matriz é singular')
 
-    # Preenche matriz C com o sistema completo: Matriz A + Vetor d
-    for i in range(m):
-        for j in range(len(A[0]) + 1):
-            # Não está de acordo com as regras da lista
-            C[i][j] = A[i][j] if j < len(A[0]) else d[i]
-    system = Matrix(C)
+def swap_lines(matriz, j, k):
+    temp = matriz[j-1]
+    matriz[j-1] = matriz[k-1]
+    matriz[k-1] = temp
 
-    symbols = M_symbols_for_amount(len(A))
+def element(A, i, j):
+    return A[i-1][j-1]
 
-    # TODO: implementar Gauss de acordo com as regras da lista
-    return solve_linear_system(system, *symbols)
-
+def set_element(A, i, j, value):
+    A[i-1][j-1] = value
 
 def M_symbols_for_amount(n):
     s = []
@@ -232,6 +262,37 @@ def binary_search(lista, t):
     # TODO Deve voltar i = m e não o intervalo
     return [m, M]
 
+# Some function unit tests
+def test_swap_lines():
+    # Testando duas dimensões
+    A = [[0, 1], [2, 3]]
+    B = [[2,3],[0,1]]
+    swap_lines(A, 1, 2)
+    assert(A == B)
+    # Testando uma dimensão
+    A = [0, 3]
+    B = [3, 0]
+    swap_lines(A, 2, 1)
+    assert(A == B)
+
+def test_find_pivot():
+    A = [[0, 1], [2, 3]]
+    y = [[2], [3]]
+    # print( A )
+    # print( y )
+    find_pivot(A, y, 1, 2)
+    # print( A )
+    # print( y )
+
+def test_gauss():
+    A = [[2, 3], [1, 1]]
+    y = [5, 2]
+    answer = gauss(A, y)
+    np.testing.assert_array_equal(answer, [1, 1])
+    A = [[0, 1], [2, 3]]
+    y = [1, 2]
+    answer = gauss(A, y)
+    np.testing.assert_array_equal(answer, [-0.5, 1])
 
 if __name__ == "__main__":
     # Testes da busca binária
@@ -242,3 +303,6 @@ if __name__ == "__main__":
     # TODO O que deve acontecer se o tempo dado estiver fora dos intervalos?
     print(binary_search(testlist, -1))
     print(binary_search(testlist, 43))
+    test_swap_lines()
+    test_find_pivot()
+    test_gauss()
