@@ -206,7 +206,7 @@ def s_delta(t, h, M, A, B):
 
 def f(t, h, M, A, B, tau):
     group_number = tau
-    distance = 100 - 2 * group_number
+    distance = 100 - 2.3 * group_number
 
     interpolation_interval = binary_search(X, distance)
     print('Intervalo de interpolação:')
