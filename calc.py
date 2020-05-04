@@ -192,13 +192,6 @@ def set_element(A, i, j, value):
     A[i - 1][j - 1] = value
 
 
-def M_symbols_for_amount(n):
-    s = []
-    for i in range(n):
-        s.append(symbols(f'M{i}'))
-    return s
-
-
 def s_delta(t, h, M, A, B):
     j = 0
     while (t > T[j]):
