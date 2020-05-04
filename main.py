@@ -5,7 +5,7 @@ import numpy as np
 T = calc.T
 
 x00 = calc.x00()
-xnn = calc.xnn(28)
+xnn = calc.xnn()
 
 h = calc.h(T)
 n = len(h)
@@ -30,6 +30,12 @@ A = calc.A(M, h, n)
 
 d = calc.make_d(h, x00, xnn)
 
+print(" =========== MATRIZ M ========== ")
+print(M)
+print(" =========== MATRIZ A ========== ")
+print(A)
+print(" =========== MATRIZ B ========== ")
+print(B)
 
 print('\n========================= TAREFA 1 ATIVIDADE 1 =========================')
 estritamente_dominante = calc.is_strictly_diagonal_dominant(matrix)

@@ -2,12 +2,13 @@ import numpy as np
 from sympy import Matrix, linsolve, solve_linear_system, symbols
 
 # Dados da queda livre
-T = np.arange(0, 1.1, 0.1)  # np.arange(0, 30)  # Vetor de tempo em segundos
+tao = 23  # Numero do grupo, usado na busca binaria
+distance = 100 - 2.3 * tao
+T = np.arange(0, 30)  # Vetor de tempo em segundos
 X = [
-    2.00, 1.81, 1.64, 1.49, 1.36, 1.25, 1.16, 1.09, 1.04, 1.01, 1.00
-    # 0, 1, 2.4, 4.1, 6, 8.2, 10.6, 13.4, 16.4, 19.7,
-    # 23.3, 27, 31.2, 35.5, 40.1, 45, 50.2, 55.6, 61.3, 67.3,
-    # 73.6, 80.1, 86.9, 94, 101.3, 109, 116.9, 125, 133.4, 142.1
+    0, 1, 2.4, 4.1, 6, 8.2, 10.6, 13.4, 16.4, 19.7,
+    23.3, 27, 31.2, 35.5, 40.1, 45, 50.2, 55.6, 61.3, 67.3,
+    73.6, 80.1, 86.9, 94, 101.3, 109, 116.9, 125, 133.4, 142.1
 ]  # Distância percorrida em queda livre ao longo do tempo
 
 epsilon = 10**-3
@@ -17,7 +18,8 @@ def x00():
     return ((X[2] - X[1]) / (T[2] - T[1]) - (X[1] - X[0]) / (T[1] - T[0])) / (T[2] - T[0])
 
 
-def xnn(n):
+def xnn():
+    n = len(T) - 1
     return ((X[n] - X[n - 1]) / (T[n] - T[n - 1]) - (X[n - 1] - X[n - 2]) / (T[n - 1] - T[n - 2])) / (T[n] - T[n - 2])
 
 
@@ -68,7 +70,7 @@ def mi_array(h):
     mi[0] = 0
 
     for i in range(1, n):
-        mi[i] = h[i] / (h[i] + h[i + 1])
+        mi[i - 1] = h[i] / (h[i] + h[i + 1])
 
     return mi
 
