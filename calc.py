@@ -141,33 +141,34 @@ def M_gauss(n, x00, xnn, mi, lambda_array, h):
 # IMPLEMENTA MÉTODO DE GAUSS
 def gauss(A, y, m=0):
     if m == 0:
-        m = len(A)
+        m = len(A)  # ordem da matriz
     for j in range(1, m):  # para j de 1 até m-1
         find_pivot(A, y, j, m)
     # print("\n")
     # print(A)
-    for i in range(j+1, m+1):  # para i de 1 até m
+    for i in range(j + 1, m + 1):  # para i de 1 até m
         mi = - (element(A, i, j) / element(A, j, j))
-        for k in range(j, m+1): # para k de j até m
+        for k in range(j, m + 1):  # para k de j até m
             set_element(A, i, k, element(A, i, k) + mi * element(A, j, k))
-        y[i-1] = y[i-1] + mi * y[j-1]
+        y[i - 1] = y[i - 1] + mi * y[j - 1]
         # print("\n")
         # print(A)
     x = np.zeros(len(y))  # Cria array e preenche com zeros
     i = m
     while (i >= 1):
-        x[i-1] = y[i-1]
-        for j in range(i+1, m+1):  # para j de i+1 até m
-            x[i-1] = x[i-1] - element(A, i, j) * x[j-1]
-        x[i-1] = x[i-1] / element(A, i, i)
+        x[i - 1] = y[i - 1]
+        for j in range(i + 1, m + 1):  # para j de i+1 até m
+            x[i - 1] = x[i - 1] - element(A, i, j) * x[j - 1]
+        x[i - 1] = x[i - 1] / element(A, i, i)
         i -= 1
     # print(x)
     return x
 
+
 def find_pivot(A, y, j, m):
     if element(A, j, j) == 0:
         matrix_singular = True
-        for k in range(j+1, m+1): # para k de j+1 até m
+        for k in range(j + 1, m + 1):  # para k de j+1 até m
             if element(A, k, j) != 0:
                 matrix_singular = False
                 swap_lines(A, j, k)
@@ -176,16 +177,20 @@ def find_pivot(A, y, j, m):
         if matrix_singular:
             raise Exception('Matriz é singular')
 
+
 def swap_lines(matriz, j, k):
-    temp = matriz[j-1]
-    matriz[j-1] = matriz[k-1]
-    matriz[k-1] = temp
+    temp = matriz[j - 1]
+    matriz[j - 1] = matriz[k - 1]
+    matriz[k - 1] = temp
+
 
 def element(A, i, j):
-    return A[i-1][j-1]
+    return A[i - 1][j - 1]
+
 
 def set_element(A, i, j, value):
-    A[i-1][j-1] = value
+    A[i - 1][j - 1] = value
+
 
 def M_symbols_for_amount(n):
     s = []
@@ -264,11 +269,12 @@ def binary_search(lista, t):
     # TODO Deve voltar i = m e não o intervalo
     return [m, M]
 
+
 # Some function unit tests
 def test_swap_lines():
     # Testando duas dimensões
     A = [[0, 1], [2, 3]]
-    B = [[2,3],[0,1]]
+    B = [[2, 3], [0, 1]]
     swap_lines(A, 1, 2)
     assert(A == B)
     # Testando uma dimensão
@@ -276,6 +282,7 @@ def test_swap_lines():
     B = [3, 0]
     swap_lines(A, 2, 1)
     assert(A == B)
+
 
 def test_find_pivot():
     A = [[0, 1], [2, 3]]
@@ -286,6 +293,7 @@ def test_find_pivot():
     # print( A )
     # print( y )
 
+
 def test_gauss():
     A = [[2, 3], [1, 1]]
     y = [5, 2]
@@ -295,6 +303,7 @@ def test_gauss():
     y = [1, 2]
     answer = gauss(A, y)
     np.testing.assert_array_equal(answer, [-0.5, 1])
+
 
 if __name__ == "__main__":
     # Testes da busca binária
