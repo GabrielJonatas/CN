@@ -67,9 +67,9 @@ def mi_array(h):
     n = len(h) - 1
     mi = np.zeros(n)
 
-    mi[0] = 0
+    mi[n] = 0
 
-    for i in range(1, n):
+    for i in range(n):
         mi[i - 1] = h[i] / (h[i] + h[i + 1])
 
     return mi
