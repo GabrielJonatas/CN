@@ -70,7 +70,7 @@ def mi_array(h):
     mi[n] = 0
 
     for i in range(n):
-        mi[i - 1] = h[i] / (h[i] + h[i + 1])
+        mi[i - 1] = h[i] / (h[i] + h[i + 1]) # Opa galera, por que mi[i-1]? 
 
     return mi
 
